@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gasto Certo - Análise Interativa do Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-link {
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        .feature-tab.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flow-node, .roadmap-step {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .flow-node:hover, .roadmap-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #94a3b8;
+        }
+    </style>
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive product showcase. The structure is thematic, guiding the user from a high-level overview to detailed explorations. 1. **Hero:** Captures attention and summarizes the system's value. 2. **Architecture Flow:** Visually explains the technical process, making a complex system understandable. 3. **Feature Explorer:** An interactive tabbed section to deep-dive into specific functionalities, mimicking how a user would learn about a new product. 4. **Simulated Dashboard:** Provides a tangible output, showing the "result" of using the bot with interactive charts. 5. **Commercialization Roadmap:** Outlines the business plan as a clear, step-by-step process. This structure was chosen to tell a complete story of the project—from concept and architecture to features, results, and future plans—in a way that is engaging and easy to navigate, far superior to a linear report format. -->
+    <!-- Visualization & Content Choices: 
+        - System Architecture -> Goal: Organize -> Viz: Interactive Flowchart -> Interaction: Hover to reveal details -> Justification: Simplifies a complex technical workflow into a digestible visual narrative. -> Method: HTML/CSS (Tailwind Flexbox).
+        - Core Features -> Goal: Inform/Organize -> Viz: Tabbed Content Panel -> Interaction: Click tabs to switch displayed content (description, example, code) -> Justification: Allows users to explore features at their own pace without overwhelming them with information. -> Method: HTML/CSS/JS.
+        - Expense Breakdown -> Goal: Compare -> Viz: Donut Chart -> Interaction: Hover on segments for tooltips -> Justification: Classic and effective way to show composition of a whole. -> Method: Chart.js/Canvas.
+        - Financial Trends -> Goal: Change -> Viz: Bar Chart -> Interaction: Hover on bars for tooltips -> Justification: Clearly compares two metrics (income vs. expense) over time. -> Method: Chart.js/Canvas.
+        - Commercialization Plan -> Goal: Organize -> Viz: Numbered Step Diagram -> Interaction: Hover on steps for subtle visual feedback -> Justification: Presents a process in a clear, linear, and easy-to-follow sequence. -> Method: HTML/CSS (Tailwind Grid).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <span class="text-2xl font-bold text-blue-600">Gasto Certo</span>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#arquitetura" class="nav-link text-slate-600 hover:text-blue-600 border-b-2 border-transparent pb-1">Arquitetura</a>
+                    <a href="#funcionalidades" class="nav-link text-slate-600 hover:text-blue-600 border-b-2 border-transparent pb-1">Funcionalidades</a>
+                    <a href="#dashboard" class="nav-link text-slate-600 hover:text-blue-600 border-b-2 border-transparent pb-1">Dashboard</a>
+                    <a href="#comercializacao" class="nav-link text-slate-600 hover:text-blue-600 border-b-2 border-transparent pb-1">Comercialização</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-8">
+        
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight">
+                Gestão Financeira Inteligente, <br class="hidden md:block" />
+                <span class="text-blue-600">Direto no seu Telegram.</span>
+            </h1>
+            <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-600">
+                Uma análise interativa do sistema "Gasto Certo", uma solução completa que transforma o Google Planilhas e o Telegram num poderoso assistente financeiro pessoal e familiar. Explore abaixo para entender como funciona, descobrir as suas funcionalidades e ver o seu potencial.
+            </p>
+        </section>
+
+        <section id="arquitetura" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-slate-900">Arquitetura do Sistema</h2>
+                <p class="mt-4 text-lg text-slate-600">Esta secção detalha o fluxo de dados do sistema, desde a mensagem inicial do utilizador no Telegram até ao armazenamento seguro e organizado na sua Planilha Google. A arquitetura foi desenhada para ser robusta, segura e eficiente.</p>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div class="flow-node card p-4 text-center w-full md:w-48">
+                    <div class="text-4xl">💬</div>
+                    <h3 class="font-semibold mt-2">Utilizador</h3>
+                    <p class="text-sm text-slate-500">Envia mensagem no Telegram</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node card p-4 text-center w-full md:w-48">
+                    <div class="text-4xl">🔗</div>
+                    <h3 class="font-semibold mt-2">Webhook</h3>
+                    <p class="text-sm text-slate-500">Recebe a requisição</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node card p-4 text-center w-full md:w-48">
+                    <div class="text-4xl">⚙️</div>
+                    <h3 class="font-semibold mt-2">Apps Script</h3>
+                    <p class="text-sm text-slate-500">Processa a lógica (`doPost`)</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node card p-4 text-center w-full md:w-48">
+                    <div class="text-4xl">📝</div>
+                    <h3 class="font-semibold mt-2">Google Planilhas</h3>
+                    <p class="text-sm text-slate-500">Armazena os dados</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="funcionalidades" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-slate-900">Explorador de Funcionalidades</h2>
+                <p class="mt-4 text-lg text-slate-600">O "Gasto Certo" é mais do que um simples registador de despesas. É uma plataforma completa com funcionalidades inteligentes desenhadas para facilitar a sua vida financeira. Clique nas abas abaixo para descobrir os recursos chave do sistema.</p>
+            </div>
+            <div class="card p-2">
+                <div class="flex flex-wrap justify-center gap-2 mb-4">
+                    <button class="feature-tab active px-4 py-2 rounded-md font-semibold transition" data-feature="nlp">Linguagem Natural</button>
+                    <button class="feature-tab px-4 py-2 rounded-md font-semibold transition" data-feature="reports">Relatórios</button>
+                    <button class="feature-tab px-4 py-2 rounded-md font-semibold transition" data-feature="voice">Comandos de Voz</button>
+                    <button class="feature-tab px-4 py-2 rounded-md font-semibold transition" data-feature="security">Licenciamento</button>
+                </div>
+                <div id="feature-content" class="bg-slate-100 p-6 rounded-lg min-h-[300px]">
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-slate-900">Dashboard Simulado</h2>
+                <p class="mt-4 text-lg text-slate-600">Para além da interação via Telegram, o sistema oferece um dashboard web visual para uma análise mais profunda. Esta secção simula a experiência do dashboard, apresentando gráficos interativos que consolidam os dados financeiros de um utilizador.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 card p-6">
+                    <h3 class="text-xl font-semibold mb-4">Despesas por Categoria</h3>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 card p-6">
+                    <h3 class="text-xl font-semibold mb-4">Fluxo de Caixa Mensal</h3>
+                    <div class="chart-container">
+                        <canvas id="flowChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comercializacao" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-slate-900">Plano de Comercialização</h2>
+                <p class="mt-4 text-lg text-slate-600">O sistema foi desenhado desde o início para ser um produto comercializável. Esta secção descreve o plano técnico de três passos para empacotar o "Gasto Certo" de forma segura, permitindo que seja vendido e instalado por outros utilizadores.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="roadmap-step card p-6">
+                    <div class="text-3xl font-bold text-blue-600 bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">1</div>
+                    <h3 class="text-xl font-semibold">Servidor de Licenças</h3>
+                    <p class="text-slate-600 mt-2">Criação de um backend privado em Apps Script para validar chaves de licença de forma centralizada e segura.</p>
+                </div>
+                <div class="roadmap-step card p-6">
+                    <div class="text-3xl font-bold text-blue-600 bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">2</div>
+                    <h3 class="text-xl font-semibold">Produto Template</h3>
+                    <p class="text-slate-600 mt-2">Adaptação do script principal para incluir uma verificação de licença que se comunica com o servidor antes de executar as funções.</p>
+                </div>
+                <div class="roadmap-step card p-6">
+                    <div class="text-3xl font-bold text-blue-600 bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">3</div>
+                    <h3 class="text-xl font-semibold">Guia de Instalação</h3>
+                    <p class="text-slate-600 mt-2">Desenvolvimento de um guia claro para que o cliente final possa copiar a planilha, configurar o bot e ativar o produto com a sua licença.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 bg-slate-100 border-t">
+        <p class="text-slate-600">Análise Interativa do Sistema Gasto Certo</p>
+    </footer>
+
+    <script>
+        const featuresData = {
+            nlp: {
+                title: 'Processamento de Linguagem Natural',
+                description: 'O coração do sistema. O bot utiliza uma combinação de palavras-chave e análise de padrões para interpretar mensagens em formato livre, extraindo valor, tipo de transação, conta, categoria e outros detalhes sem a necessidade de comandos rígidos.',
+                example: '`gastei 50 no mercado com o cartão nubank`',
+                codeFile: 'FinancialLogic.gs'
+            },
+            reports: {
+                title: 'Relatórios e Consultas',
+                description: 'Comandos simples como `/saldo` e `/resumo` fornecem uma visão instantânea da saúde financeira. O sistema consolida dados de múltiplas contas e cartões, apresentando saldos, faturas e despesas de forma clara e organizada.',
+                example: '`/resumo`',
+                codeFile: 'Commands.gs'
+            },
+            voice: {
+                title: 'Comandos de Voz',
+                description: 'Para máxima conveniência, o sistema integra uma API de Speech-to-Text. O utilizador pode enviar uma mensagem de voz, que é transcrita e processada da mesma forma que uma mensagem de texto, permitindo o registo de finanças com as mãos livres.',
+                example: '(Mensagem de áudio)',
+                codeFile: 'VoiceHandler.gs'
+            },
+            security: {
+                title: 'Licenciamento e Segurança',
+                description: 'Para a comercialização, foi projetada uma arquitetura de licenciamento robusta. Um servidor de licenças privado valida chaves únicas, vinculando-as à conta Google do cliente e protegendo o sistema contra cópias não autorizadas.',
+                example: '`/ativar GC-ABCD-1234-EFGH`',
+                codeFile: 'LicenseCheck.gs'
+            }
+        };
+
+        function updateFeatureContent(featureKey) {
+            const data = featuresData[featureKey];
+            const contentDiv = document.getElementById('feature-content');
+            contentDiv.innerHTML = `
+                <h3 class="text-2xl font-bold mb-2">${data.title}</h3>
+                <p class="text-slate-600 mb-4">${data.description}</p>
+                <div class="mb-4">
+                    <span class="font-semibold">Exemplo de Uso:</span>
+                    <div class="bg-white p-3 rounded-md mt-2 text-sm font-mono">${data.example}</div>
+                </div>
+                <div>
+                    <span class="font-semibold">Arquivo Principal:</span>
+                    <div class="bg-white p-3 rounded-md mt-2 text-sm font-mono">${data.codeFile}</div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const featureTabs = document.querySelectorAll('.feature-tab');
+            featureTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    featureTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateFeatureContent(tab.dataset.feature);
+                });
+            });
+            updateFeatureContent('nlp');
+
+            const tooltipCallback = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            
+            new Chart(document.getElementById('categoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Alimentação', 'Transporte', 'Moradia', 'Lazer', 'Outros'],
+                    datasets: [{
+                        label: 'Despesas',
+                        data: [450.75, 220.50, 1200.00, 150.25, 300.50],
+                        backgroundColor: ['#60a5fa', '#34d399', '#facc15', '#fb923c', '#94a3b8'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: tooltipCallback.plugins.tooltip
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('flowChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Receitas',
+                        data: [3500, 3600, 3550, 3800, 3700, 4000],
+                        backgroundColor: '#34d399',
+                        borderRadius: 6,
+                    }, {
+                        label: 'Despesas',
+                        data: [2800, 3100, 2900, 3200, 3150, 3400],
+                        backgroundColor: '#f87171',
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e2e8f0'
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                             labels: {
+                                padding: 15,
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: tooltipCallback.plugins.tooltip
+                    }
+                }
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
