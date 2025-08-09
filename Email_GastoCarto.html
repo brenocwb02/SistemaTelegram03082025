@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao Gasto Certo!</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .editor-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .editor-panel h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            placeholder-color: rgba(255, 255, 255, 0.7);
+            min-width: 200px;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .email-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="1.2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-20px) rotate(360deg); }
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .content {
+            padding: 50px 30px;
+        }
+        
+        .welcome-message {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-left: 5px solid #667eea;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .credentials-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .credentials-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .credentials-box h3 {
+            margin-bottom: 25px;
+            font-size: 22px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .credential-item {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .credential-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .credential-value {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.25);
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        .editable {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            padding: 8px;
+            border-radius: 6px;
+            min-height: 1.2em;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .editable:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .editable:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.4);
+            border-style: solid;
+        }
+        
+        .steps-section {
+            margin: 50px 0;
+        }
+        
+        .steps-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .step {
+            border: 2px solid #e9ecef;
+            border-top: none;
+            padding: 35px;
+            position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-color: #667eea;
+        }
+        
+        .step:last-child {
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            position: absolute;
+            top: -25px;
+            left: 35px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            border: 4px solid white;
+        }
+        
+        .step-title {
+            color: #667eea;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            margin-left: 30px;
+        }
+        
+        .step-content {
+            margin-left: 30px;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-list li {
+            margin: 15px 0;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .step-list li:before {
+            content: "✨";
+            font-size: 16px;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffd93d;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .footer p {
+            margin-bottom: 15px;
+            color: #6c757d;
+            font-size: 16px;
+        }
+        
+        .signature {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 18px;
+        }
+        
+        .emoji {
+            font-size: 1.3em;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        .copy-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            .step {
+                padding: 25px 20px;
+            }
+            
+            .step-content {
+                margin-left: 15px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-field {
+                min-width: 250px;
+            }
+        }
+    
+    </style>
+</head>
+<body style="background: #f8f9fa; padding: 20px;">
+    <div class="email-container" id="emailContent">
+            <div class="header">
+                <h1><span class="emoji">💰</span> Bem-vindo ao Gasto Certo!</h1>
+                <p>Seu assistente financeiro inteligente está pronto para usar</p>
+            </div>
+            
+            <div class="content">
+                <div class="welcome-message">
+                    <p><strong>Olá, <span class="editable" contenteditable="true">[Escolha Sua Arte]</span>!</strong></p>
+                    <p>Muito obrigado por adquirir o <strong>Gasto Certo</strong>! Estamos muito felizes por tê-lo connosco. O seu novo assistente financeiro está pronto para ser ativado e começar a organizar as suas finanças de forma simples e inteligente.</p>
+                </div>
+                
+                <div class="credentials-box">
+                    <h3><span class="emoji">🔑</span> Suas Informações Exclusivas</h3>
+                    <div class="credential-item">
+                        <div class="credential-label">Sua Chave de Licença:</div>
+                        <div class="credential-value editable" contenteditable="true">GC-760C-1CD0-7443</div>
+                    </div>
+                    <div class="credential-item">
+                        <div class="credential-label">Link da Planilha Template:</div>
+                        <div class="credential-value editable" contenteditable="true">[Sua Planilha]</div>
+                    </div>
+                </div>
+                
+                <div class="steps-section">
+                    <div class="steps-title">
+                        <span class="emoji">🚀</span> Guia de Instalação Rápida (3 Passos)
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Copie a sua Planilha e Ative o Produto</div>
+                        <div class="step-content">
+                            <ul class="step-list">
+                                <li>Primeiro, clique no <strong>Link da Planilha Template</strong> acima para fazer uma cópia para o seu Google Drive.</li>
+                                <li>Na sua nova planilha, vá ao menu <strong>Gasto Certo &gt; ⚠️ Ativar Produto</strong>.</li>
+                                <li>Na caixa de diálogo que aparecer, cole a sua <strong>Chave de Licença</strong> (que está no início deste e-mail) e clique em OK.</li>
+                                <li>Após a confirmação, recarregue a página da planilha (pode pressionar F5 no Windows ou ⌘+R no Mac).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Inicialize o Sistema</div>
+                        <div class="step-content">
+                            <ul class="step-list">
+                                <li>Com a página recarregada, um novo menu aparecerá. Vá a <strong>Gasto Certo &gt; 🚀 Inicializar Sistema</strong>.</li>
+                                <li>Confirme a ação na caixa de diálogo. O script irá criar e configurar automaticamente todas as abas necessárias para si.</li>
+                                <li>Quando o processo terminar, recarregue a página novamente.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Configure as suas Contas e o Bot</div>
+                        <div class="step-content">
+                            <p><strong>O seu sistema está agora instalado! Para finalizar:</strong></p>
+                            <ul class="step-list">
+                                <li>Vá a <strong>Gasto Certo &gt; ⚙️ Configurações</strong> para abrir uma barra lateral. Utilize-a para adicionar as suas contas bancárias, cartões de crédito e as palavras-chave que mais utiliza.</li>
+                                <li>Depois, vá a <strong>Gasto Certo &gt; Configuração do Bot (Telegram)</strong> e preencha as informações do seu bot do Telegram (Token e Chat ID).</li>
+                                <li>Por fim, implante o App da Web seguindo as instruções na caixa de diálogo de configuração do bot para obter a URL e conectá-la ao Telegram.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-message">
+                    <span class="emoji">🎉</span> Pronto! O seu assistente financeiro está configurado e pronto a usar!
+                </div>
+                
+                <div class="highlight-box">
+                    <p><strong><span class="emoji">💡</span> Próximo passo:</strong> Basta abrir o seu bot no Telegram e começar a registar as suas finanças!</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Se tiver alguma dúvida durante o processo, não hesite em responder a este e-mail.</p>
+                <p>Estamos aqui para ajudar! <span class="emoji">😊</span></p>
+                <p class="signature">Um abraço,<br><strong>Breno Andrade / Vida em Ordem</strong></p>
+            </div>
+        </div>
+</body>
+</html>
